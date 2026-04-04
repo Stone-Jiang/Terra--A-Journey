@@ -1,6 +1,0 @@
-\contentsline {chapter}{\numberline {1}English Test}{1}{chapter.1}%
-\contentsline {section}{\numberline {1.1}Odd Testing Page}{1}{section.1.1}%
-\contentsline {section}{\numberline {1.2}Even Page Test}{3}{section.1.2}%
-\contentsline {chapter}{\numberline {2}中文测试}{5}{chapter.2}%
-\contentsline {section}{\numberline {2.1}卫戍协议}{5}{section.2.1}%
-\contentsline {chapter}{\numberline {3}数学测试}{7}{chapter.3}%
