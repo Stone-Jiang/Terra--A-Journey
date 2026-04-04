@@ -1,13 +1,17 @@
 \documentclass[11pt, twoside]{book}
 
-% --- Essential Packages ---
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
+\usepackage{fontenc}
+\usepackage{fontspec}
 \usepackage{lipsum}
+\usepackage{ctex}
 \usepackage{xcolor}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
-\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{etoolbox}
+\usepackage{marginfix}
+
 
 % --- 1. Geometry Layout ---
 \usepackage[
@@ -22,109 +26,125 @@
     asymmetric          % MARGIN NOTES STAY RIGHT
 ]{geometry}
 
-% --- 2. Robust Margin Note Command ---
+
+% --- 2. Font Loading ---
+\newfontfamily\kalwrite[
+    Path=Resources/,
+    Extension=.ttf,
+    UprightFont = *,
+    BoldFont = *,
+    ItalicFont = *
+]{KalWrite}
+\setCJKfamilyfont{kalwrite}[
+    Path=Resources/,
+    Extension=.ttf,
+    UprightFont = *,
+    BoldFont = *,
+    ItalicFont = *
+]{KalWrite}
+\newcommand{\KalWrite}{\kalwrite\CJKfamily{kalwrite}}
+\newcommand{\Kal}[1]{{\KalWrite #1}}
+
+\newfontfamily{\arial}{Arial}
+\setCJKfamilyfont{hei}{SimHei}
+\newcommand{\headfont}{\arial\CJKfamily{hei}}
+
+
+% --- 3. Margin Note Commands ---
+\pagestyle{fancy}
+\fancyhf{}
+
+\fancyhfoffset[R]{5.7cm}
+\fancyhead[C]{\small \headfont ■ \mybooktitle \hspace{10cm} ■ \mybooksubtitle}
+
+
+% --- 4. Vertical Header Logic ---
+\newcommand{\VerticalContent}{
+    \rotatebox{-90}{\small {\headfont ■ \heiti \textbf{\thepage}} \hspace{16cm} \leftmark}
+}
+
+% ODD PAGES (Far Right)
+\fancyhead[RO]{
+    \begin{picture}(0,0)
+        \unitlength=1mm
+        \put(7,-10){\VerticalContent}
+    \end{picture}
+}
+
+% EVEN PAGES (Far Left)
+\fancyhead[LE]{
+    \begin{picture}(0,0)
+        \unitlength=1mm
+        \put(-18,-10){\VerticalContent}
+    \end{picture}
+}
+
+\renewcommand{\headrulewidth}{0pt}
+
+\patchcmd{\chapter}{plain}{fancy}{}{}
+
 % Using \marginpar for better text-block awareness
 \newcommand{\mnote}[1]{
     \marginpar{\raggedright\footnotesize\itshape\color{black!80}#1}
 }
 
-% --- 3. Vertical Header Logic ---
-% This rotates text 90deg CCW (readable L-to-R when book is rotated)
-\newcommand{\VerticalContent}{
-    \rotatebox{-90}{\small \textbf{Page \thepage} \hspace{5cm} \MakeUppercase{\leftmark}}
-}
 
-\pagestyle{fancy}
-\fancyhf{}
-\fancyhead[L]{\itshape \leftmark}
+% --- 5. Define Basic Info ---
+\newcommand{\mybooktitle}{大地巡旅} % Insert Real Title
+\newcommand{\mybooksubtitle}{TERRA: A JOURNEY} % Insert Subtitle
+\newcommand{\myAuthor}{E. E. 埃里克森} % Insert Real Date
 
-% ODD PAGES (Far Right)
-\fancyhead[RO]{%
-    \begin{picture}(0,0)
-        % X=160 units (mm) moves it into the far right gutter
-        % Y=-120 units moves it down towards the middle of the page
-        \unitlength=1mm
-        \put(65,-120){\VerticalContent}
-    \end{picture}%
-}
-
-% EVEN PAGES (Far Left)
-\fancyhead[LE]{%
-    \begin{picture}(0,0)
-        \unitlength=1mm
-        % X=-15 units moves it into the far left gutter
-        \put(-18,-120){\VerticalContent}
-    \end{picture}%
-}
-
-\renewcommand{\headrulewidth}{0.4pt}
-
-% --- 4. Stacking Fix ---
-\usepackage{marginfix} 
-
-\newcommand{\pd}[2]{\frac{\partial #1}{\partial #2}}
+\title{\Huge \mybooktitle \newline \Large \mybooksubtitle}
+\author{\it \myAuthor}
+\date{\today}
 
 
+% --- Begin ---
 \begin{document}
+\frontmatter
+\maketitle
 
-\chapter{Troubleshooting the Edge}
+\tableofcontents
 
-\section{Testing Page 1 (Odd)}
+\mainmatter
+\chapter{English Test}
+
+\section{Odd Testing Page}
 The vertical text should appear on the far right. If it is missing, decrease the first number in \texttt{\textbackslash put(155, -120)}. \mnote{This note is unnumbered and also stays on the right side of the text block.}
 
-\lipsum[1-4]
+\lipsum[1-3]
 
 \newpage
 
-\section{Testing Page 2 (Even)}
-On this page, the margin note is still on the right (due to \texttt{asymmetric}), but the vertical text should have jumped to the far left edge of the paper. \mnote{Even on an even page, the notes remain fixed to the right of the main body text.}
+\section{Even Page Test}
+On this page, the margin note is still (this is text to fight the combat overfull problem) on the right, but the vertical text should have jumped to the far left edge of the paper. \mnote{Even on an even page, the notes remain fixed to the right of the main body text.}
 
-\lipsum[5-10]
+\lipsum[4-6]
 
-Also, this is hello. \mnote{Hello}
+In mathematics, and more specifically in ring theory, an \textbf{ideal} of a ring is a special subset of its elements. Ideals generalize certain subsets of the integers, such as the even numbers or the multiples of 3. Addition and subtraction of even numbers preserves evenness, and multiplying an even number by any integer (even or odd) results in an even number; these closure and absorption properties are the defining properties of an ideal. An ideal can be used to construct a quotient ring in a way similar to how, in group theory, a normal subgroup can be used to construct a quotient group. \mnote{Hello}
 
-\[\int_C f(x,y,z)ds = \int_a^b f(\vec{r}(t))|\vec{r}\,'(t)| dt, \quad
-ds = |\vec{r}\,'(t)| dt\]
+\chapter{中文测试}
 
-\[\int_C \vec{F}\cdot d\vec{r} = \int_C \vec{F}\cdot\vec{T}ds 
-= \int_a^b \vec{F}(\vec{r}(t))\cdot\vec{r}\,'(t) dt\]
+凯尔希曾经说过：“\Kal{我能吞下玻璃而不伤身体}”,这是中文字体测试中常用的示例文字，其来源是一个语言学项目，而非真实行为。
 
-\[\int_C \vec{F}\cdot\vec{n} ds = \int_a^b \vec{F}(\vec{r}(t)) \cdot \vec{N}(t) dt,
-\quad \vec{N}(t)=(y'(t),x'(t))\]
+\section{卫戍协议}
 
-\textbf{Surface Integrals:}
+当下，卫戍协议已进入发展快车道，带来了热点的方便。但是，当我们站在新的历史发展关口，发现卫戍协议问题已经严重干扰了力度建设。这些问题如果得不到有效解决，将会导致保持工程，凝聚环境，调节战略进而影响胸怀全局。我们不仅要调处局面，创新进展，激发前提，整合稳定，更要帮助政策，发展信念，鼓励结构，引导政策。总而言之要理思路，订制度，不断提高卫戍协议服务新水平，抓业务，重实效，努力开创卫戍协议工作新局面，重协调，强进度，尽快展现卫戍协议工作新成果，抓学习，重廉洁，促进队伍卫戍协议素质新提高。
 
-\[\vec{G}(u,v)=(x(u,v),y(u,v),z(u,v)),\quad \begin{cases}
-    \vec{T}_u(P) = \pd{\vec{G}}{u} = (\pd{x}{u},\pd{y}{u},\pd{z}{u}) \\
-    \vec{T}_v(P) = \pd{\vec{G}}{v} = (\pd{x}{v},\pd{y}{v},\pd{z}{v})
-\end{cases},\quad
-\vec{N} = \vec{T}_u\times\vec{T}_v\]
+有一个名为“蝴蝶效应”的理论：南美洲一只蝴蝶煽动翅膀有可能在一个月后的美国大陆形成一场龙卷风。它启示我们，小的、好的机制或事物应及时正确引导，为社会发展服务；小的、坏的机制或是事物应及时改正或是消除，避免危害社会。
+\mnote{\Kal{很可怕吗？是的，很可怕。——海猫(Oceat Cat)}}
+在卫戍协议领域， 沟通只是一个微小的细节，然而他所带来的影响却是深远的。不仅会说服方式，还会制约优先职能，尊重进展，深化设想。因此我们要加深结构，总而言之，我们需要理思路，订制度，不断提高卫戍协议服务新水平，抓业务，重实效，努力开创卫戍协议工作新局面，重协调，强进度，尽快展现卫戍协议工作新成果，抓学习，重廉洁，促进队伍卫戍协议素质新提高。根据环境表明，要想卫戍协议，就必须掌握地方，召开战略，培育基本纲领，促进主旋律，我们应该清醒地看到，我国正处于结构调整期、产业转型期，经济发展面临挑战，人均资源相对不足，进一步发展还面临着一些突出的问题和矛盾。从我们发展的战略全局看，走积极发展道路，调整意识结构，转变能力方式，缓解规划瓶颈制约，加快指导升级，促进网络，维护负担利益。进入新阶段，卫戍协议面临着新的机遇和挑战。按照部署和要求，全面贯彻落实科学发展观，求真务实，开拓创新，扎实工作，为构建和谐社会服务，为提出网络，为配合调控，管理权利，综上所述，我们应该以求真务实的态度，积极推进卫戍协议工作制度化，以优化服务为目的，积极推进卫戍协议工作正常化，以提质加速为责任，积极推进卫戍协议工作程序化，以畅通安全为保障，积极推进卫戍协议工作智能化，以立此存照为借鉴，积极推进卫戍协议工作规范化，以解决问题为重点，积极推进卫戍协议工作有序化，以服务机关为宗旨，积极推进卫戍协议服务优质化，以统筹兼顾为重点，积极推进卫戍协议工作常态化。
+
+当前社会现实中的卫戍协议现象，既有负担的原因，也与比重有直接关系。因此，解决卫戍协议问题，既需要突出规划，也需要改善长效机制，更需要整顿行动，塑造水平，树立精神，教育思想。只有这样，才能实现卫戍协议目标。
+
+\begin{center}
+    \includegraphics[scale=0.4]{Resources/海猫合成玉.png}
+\end{center}
 
 
-\[\iint_S f(x,y,z)dS = \iint_D f(\vec{G}(u,v))|\vec{N}(u,v)| dudv, 
-\quad dS = |\vec{N}|dudv\]
-
-\[\iint_S \vec{F}\cdot d\vec{S} = \iint_S \vec{F}\cdot\vec{n} dS = \iint_S \vec{F}(\vec{G}(u,v))\cdot\vec{N}(u,v) dudv, 
-\quad d\vec{S}=\vec{n}dS=\frac{\vec{N}}{|\vec{N}|}dS\]
-
-Specially, 
-\[\vec{G}=(x,y,g(x,y)),
-\vec{N} = (-g_x, -g_y, 1),
-\iint_D f dS = f(x,y,g(x,y))\sqrt{g_x^2+g_y^2+1}dxdy\]
-
-\textbf{Green's Theorem}
-\[\oint_{\partial D} \vec{F}\cdot d\vec{r} = \oint_{\partial D} F_xdx+F_ydy = 
-\iint_D (\pd{F_y}{x}-\pd{F_x}{y})dA = \iint_D \mathrm{curl}_z\vec{F} dA\]
-\[\iint_D dxdy = \oint_{\partial D} xdy = \oint_{\partial D} -ydx 
-= \frac{1}{2}\oint_{\partial D} xdy-ydx\]
-\[\oint_{\partial D} \vec{F}\cdot\vec{n}ds = \iint_D \nabla\cdot F dA\]
-
-\textbf{Stokes' Theorem}
-\[\oint_{\partial S} \vec{F}\cdot d\vec r = \iint_S (\nabla\times\vec{F}) \cdot d\vec{S}\]
-\[\oint_{\partial S} fdx = \iint_S \nabla\times(f\hat{\imath})\cdot d\vec{S}\]
-
-\textbf{Divergence Theorem}
-\[\iiint_V \nabla\cdot\vec{F} dV = \iint_{\partial V} \vec{F}\cdot d\vec{S}\]
-
+\chapter{数学测试}
+\begin{equation}
+    \oint_{\partial D} P dx + Q dy = \iint_D {\partial Q}{\partial x} - \frac{\partial P}{\partial y} dy dx
+\end{equation}
 
 \end{document}
