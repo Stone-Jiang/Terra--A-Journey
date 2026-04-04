@@ -7,12 +7,13 @@
 \usepackage{xcolor}
 \usepackage{graphicx}
 \usepackage{fancyhdr}
+\usepackage{amsmath}
 
 % --- 1. Geometry Layout ---
 \usepackage[
     paper=a4paper,
-    top=2.5cm,
-    bottom=2.5cm,
+    top=2cm,
+    bottom=2cm,
     left=2cm,           
     right=7cm,          % Wide area for notes
     marginparwidth=5cm, 
@@ -23,15 +24,14 @@
 
 % --- 2. Robust Margin Note Command ---
 % Using \marginpar for better text-block awareness
-\newcommand{\mnote}[1]{%
-    \marginpar{\raggedright\footnotesize\itshape\color{black!80}#1}%
+\newcommand{\mnote}[1]{
+    \marginpar{\raggedright\footnotesize\itshape\color{black!80}#1}
 }
 
 % --- 3. Vertical Header Logic ---
 % This rotates text 90deg CCW (readable L-to-R when book is rotated)
-\newcommand{\VerticalContent}{%
-    \color{blue!70!black}% Debug color to see it clearly
-    \rotatebox{-90}{\small \textbf{Page \thepage} \hspace{2cm} \MakeUppercase{\leftmark}}%
+\newcommand{\VerticalContent}{
+    \rotatebox{-90}{\small \textbf{Page \thepage} \hspace{5cm} \MakeUppercase{\leftmark}}
 }
 
 \pagestyle{fancy}
@@ -62,6 +62,9 @@
 % --- 4. Stacking Fix ---
 \usepackage{marginfix} 
 
+\newcommand{\pd}[2]{\frac{\partial #1}{\partial #2}}
+
+
 \begin{document}
 
 \chapter{Troubleshooting the Edge}
@@ -80,6 +83,47 @@ On this page, the margin note is still on the right (due to \texttt{asymmetric})
 
 Also, this is hello. \mnote{Hello}
 
+\[\int_C f(x,y,z)ds = \int_a^b f(\vec{r}(t))|\vec{r}\,'(t)| dt, \quad
+ds = |\vec{r}\,'(t)| dt\]
 
+\[\int_C \vec{F}\cdot d\vec{r} = \int_C \vec{F}\cdot\vec{T}ds 
+= \int_a^b \vec{F}(\vec{r}(t))\cdot\vec{r}\,'(t) dt\]
+
+\[\int_C \vec{F}\cdot\vec{n} ds = \int_a^b \vec{F}(\vec{r}(t)) \cdot \vec{N}(t) dt,
+\quad \vec{N}(t)=(y'(t),x'(t))\]
+
+\textbf{Surface Integrals:}
+
+\[\vec{G}(u,v)=(x(u,v),y(u,v),z(u,v)),\quad \begin{cases}
+    \vec{T}_u(P) = \pd{\vec{G}}{u} = (\pd{x}{u},\pd{y}{u},\pd{z}{u}) \\
+    \vec{T}_v(P) = \pd{\vec{G}}{v} = (\pd{x}{v},\pd{y}{v},\pd{z}{v})
+\end{cases},\quad
+\vec{N} = \vec{T}_u\times\vec{T}_v\]
+
+
+\[\iint_S f(x,y,z)dS = \iint_D f(\vec{G}(u,v))|\vec{N}(u,v)| dudv, 
+\quad dS = |\vec{N}|dudv\]
+
+\[\iint_S \vec{F}\cdot d\vec{S} = \iint_S \vec{F}\cdot\vec{n} dS = \iint_S \vec{F}(\vec{G}(u,v))\cdot\vec{N}(u,v) dudv, 
+\quad d\vec{S}=\vec{n}dS=\frac{\vec{N}}{|\vec{N}|}dS\]
+
+Specially, 
+\[\vec{G}=(x,y,g(x,y)),
+\vec{N} = (-g_x, -g_y, 1),
+\iint_D f dS = f(x,y,g(x,y))\sqrt{g_x^2+g_y^2+1}dxdy\]
+
+\textbf{Green's Theorem}
+\[\oint_{\partial D} \vec{F}\cdot d\vec{r} = \oint_{\partial D} F_xdx+F_ydy = 
+\iint_D (\pd{F_y}{x}-\pd{F_x}{y})dA = \iint_D \mathrm{curl}_z\vec{F} dA\]
+\[\iint_D dxdy = \oint_{\partial D} xdy = \oint_{\partial D} -ydx 
+= \frac{1}{2}\oint_{\partial D} xdy-ydx\]
+\[\oint_{\partial D} \vec{F}\cdot\vec{n}ds = \iint_D \nabla\cdot F dA\]
+
+\textbf{Stokes' Theorem}
+\[\oint_{\partial S} \vec{F}\cdot d\vec r = \iint_S (\nabla\times\vec{F}) \cdot d\vec{S}\]
+\[\oint_{\partial S} fdx = \iint_S \nabla\times(f\hat{\imath})\cdot d\vec{S}\]
+
+\textbf{Divergence Theorem}
+\[\iiint_V \nabla\cdot\vec{F} dV = \iint_{\partial V} \vec{F}\cdot d\vec{S}\]
 
 \end{document}
