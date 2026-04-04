@@ -1,3 +1,6 @@
 {
-    "jieba.enableOnDoubleClick": true
+    "jieba.enableOnDoubleClick": true,
+    "cSpell.words": [
+        "starttoc"
+    ]
 }
