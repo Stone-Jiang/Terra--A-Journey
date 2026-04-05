@@ -1,117 +1,204 @@
-\usepackage{ctex}
-\usepackage{geometry}
-\usepackage{graphicx}
-\usepackage{marginnote}
-\usepackage{fancyhdr}
-\usepackage{lipsum}
+\usepackage{fontenc}
 \usepackage{fontspec}
+\usepackage{lipsum}
+\usepackage{ctex}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{etoolbox}
+\usepackage{marginfix}
+\usepackage{framed}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{titlesec}
 \usepackage{ragged2e}
-\usepackage{framed}
-\usepackage{tcolorbox}
-\usepackage{calc}
-\usepackage{everypage}
+\usepackage{multicol}
+\usepackage[most]{tcolorbox}
+\usepackage{titletoc}
+\usepackage{wallpaper}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
 
 
-% Set a font that includes the solid square symbol
-\setmainfont{Arial}
-
-\geometry{
+% --- Geometry Layout ---
+\usepackage[
     paper=a4paper,
-    inner=2.5cm,         % Inside margin (binding side)
-    outer=6.5cm,         % Outside margin - extra space for right-side notes
-    top=2.5cm,
-    bottom=2.5cm,
-    marginparwidth=4.5cm, % Width of margin notes
-    marginparsep=0.5cm,   % Gap between text and margin note
-    includemp=true        % Include marginpar area in total width
-}
-
-\reversemarginpar
-
-\renewcommand*{\marginfont}{\scriptsize\RaggedRight\color{gray}}
-\setlength{\marginparpush}{0.2cm}
-\newcommand{\mnote}[1]{\marginnote{#1}}
-
-\AddEverypageHook{%
-    \ifodd\thepage
-        % Odd page (right page): vertical text on far right
-        \begin{textblock}{1}(98, 5)  % 98% from left, 5% from top
-            \rotatebox{90}{%
-                \tiny\sffamily\textcolor{gray!50}{%
-                    \thepage\ --- REAL MARGIN (RIGHT) --- \rightmark
-                }%
-            }%
-        \end{textblock}
-        % Also on far left for odd pages (spine side gets chapter info)
-        \begin{textblock}{1}(1, 5)  % 1% from left
-            \rotatebox{90}{%
-                \tiny\sffamily\textcolor{gray!30}{%
-                    \leftmark
-                }%
-            }%
-        \end{textblock}
-    \else
-        % Even page (left page): vertical text on far left
-        \begin{textblock}{1}(1, 5)  % 1% from left
-            \rotatebox{90}{%
-                \tiny\sffamily\textcolor{gray!50}{%
-                    \thepage\ --- REAL MARGIN (LEFT) --- \leftmark
-                }%
-            }%
-        \end{textblock}
-        % Also on far right for even pages
-        \begin{textblock}{1}(98, 5)
-            \rotatebox{90}{%
-                \tiny\sffamily\textcolor{gray!30}{%
-                    \rightmark
-                }%
-            }%
-        \end{textblock}
-    \fi
-}
+    top=2cm,
+    bottom=2cm,
+    left=1.5cm,           
+    right=6cm,          % Wide area for notes
+    marginparwidth=4.5cm, 
+    marginparsep=0.5cm, 
+    headheight=16pt,    % Increased to prevent fancyhdr warnings
+    asymmetric          % MARGIN NOTES STAY RIGHT
+]{geometry}
 
 
+% --- Font Loading ---
+\newfontfamily\kalwrite[
+    Path=Resources/,
+    Extension=.ttf,
+    UprightFont = *,
+    BoldFont = *,
+    ItalicFont = *
+]{KalWrite}
+\setCJKfamilyfont{kalwrite}[
+    Path=Resources/,
+    Extension=.ttf,
+    UprightFont = *,
+    BoldFont = *,
+    ItalicFont = *
+]{KalWrite}
+\newcommand{\KalWrite}{\kalwrite\CJKfamily{kalwrite}}
+\newcommand{\Kal}[1]{{\KalWrite #1}}
 
-% Define a command for rotated side notes
-\newcommand{\rotatedsidenote}[1]{%
-    \marginnote{\rotatebox{270}{\raggedright\small#1}}%
-}
+\newfontfamily{\arial}{Arial}[
+    BoldFont=Arial Bold,
+    ItalicFont=Arial Italic,
+    BoldItalicFont=Arial Bold Italic
+]
+\setCJKfamilyfont{hei}{Microsoft YaHei}[
+    BoldFont=Microsoft YaHei Bold,
+    ItalicFont=Microsoft YaHei,
+    BoldItalicFont=Microsoft YaHei Bold
+]
+% \setCJKfamilyfont{hei}{SimHei}
+\newcommand{\headfont}{\arial\CJKfamily{hei}}
+
+\newfontfamily{\stencil}{Stencil}
+
+% --- Color Definition ---
+\definecolor{partgreen}{RGB}{0,180,120}
+\definecolor{noteyellow}{RGB}{247,247,219}
 
 
+% --- Chapter Redefinition ---
+\renewcommand{\chaptermark}[1]{
+    \markboth{\thechapter\quad #1}{}}
+
+\renewcommand{\sectionmark}[1]{
+    \markright{\thesection\quad #1}}
+
+
+% --- Margin Note Commands ---
 \pagestyle{fancy}
-\fancyheadoffset{0pt}
-\fancyfootoffset{0pt}
-\setlength{\headwidth}{\paperwidth}
-\setlength{\headheight}{22pt}
+\fancyhf{}
 
-\fancyhf{} % Clear all header and footer fields
-\fancyhead[L]{\small ■ \heiti 大地巡旅} % Left header
-\fancyhead[C]{\hspace{11cm} \small ■ TERRA: A JOURNEY} % Center header
-\renewcommand{\headrulewidth}{0pt} % Remove the header line
-
-\fancyfoot[C]{\thepage}
-
-% Redefine the plain page style to use the same header/footer as fancy
-\fancypagestyle{plain}{\pagestyle{fancy}}
+\fancyhfoffset[R]{5.7cm}
+\fancyhead[C]{\small \headfont ■ \mybooktitle \hspace{10cm} ■ \mybooksubtitle}
 
 
-% Set Epigraph style
-\renewenvironment{leftbar}[1][\hsize]
-{%
-    \def\FrameCommand
-    {%
-        {\color{SpringGreen}\vrule width 3pt}%
+% --- Vertical Header Logic ---
+\newcommand{\VerticalContent}{
+    \rotatebox{-90}{\small {\headfont ■ \heiti \textbf{\thepage}} \hspace{16cm} \leftmark / \rightmark}
+}
+
+% ODD PAGES (Far Right)
+\fancyhead[RO]{
+    \begin{picture}(0,0)
+        \unitlength=1mm
+        \put(-3,-10){\VerticalContent}
+    \end{picture}
+}
+
+% EVEN PAGES (Far Left)
+\fancyhead[LE]{
+    \begin{picture}(0,0)
+        \unitlength=1mm
+        \put(-14,-10){\VerticalContent}
+    \end{picture}
+}
+
+\renewcommand{\headrulewidth}{0pt}
+
+\newcommand{\gsq}{{\arial \textcolor{SpringGreen}{■}} \vspace{2pt}}
+
+% Using \marginpar for better text-block awareness
+\newcommand{\mnote}[1]{
+    \marginpar{\raggedright\footnotesize
+    \gsq
+    \itshape\color{black!80}#1}
+}
+
+
+% --- Text Environments ---
+\newenvironment{epigraph}[1][\hsize]{
+    \def\FrameCommand{
+        {\color{SpringGreen}\vrule width 3pt}
         \hspace{8pt}%must no space.
-    }%
-    \MakeFramed{\hsize#1\advance\hsize-\width\FrameRestore}%
-}
-{\endMakeFramed}
+    }
+    \MakeFramed{\hsize#1\advance\hsize-\width\FrameRestore}
+}{\endMakeFramed}
 
-\newcommand{\note}[1]{%
-    \marginpar{%  边注自动：奇数页右，偶数页左
-        \footnotesize % 注释小字体
-        #1%
-    }%
+
+% --- Misc Stuff ---
+\let\cleardoublepage\clearpage
+\renewcommand{\contentsname}{}
+
+
+% --- TOC ---
+\newcommand{\GenericTocStyle}[3]{
+    \titlecontents{#1}
+    [#2]                               % Left Indent
+    {#3}                               % Vertical space/font
+    {\makebox[2.8em][l]{\thecontentspage}} % THE PAGE NUMBER FIRST
+    {}                                 % Numberless entry (like \chapter*)
+    {\hfill}                           % Fill the gap to the title
 }
+\GenericTocStyle{part}{0pt}{\addvspace{1pc} \bfseries \Big}
+\GenericTocStyle{chapter}{0pt}{\addvspace{1pc} \bfseries}
+\GenericTocStyle{section}{3pt}{\small}
+\GenericTocStyle{subsection}{2em}{\footnotesize}
+
+
+% --- Chapter Titles ---
+% \titleformat{\chapter}
+%     {\headfont\huge\bfseries}        % format applied to whole title
+%     {Ch \thechapter}   % label
+%     {1em}                   % space between label and title
+%     {}                      % code before title
+%     [\vspace{1ex}\titlerule] % code after title
+% \titlespacing{\chapter}
+%     {0pt}   % left margin
+%     {0pt}   % space before
+%     {30pt}  % space after
+
+\titleformat{\chapter}[display]
+{\headfont\bfseries}
+{
+    \begin{tikzpicture}
+        \fill[black] (0,0) rectangle (2.4cm,0.8cm);
+        \node[anchor=west,white,xshift=0cm,font=\selectfont] at (0,0.4) {CHAPTER \bfseries\thechapter};
+    \end{tikzpicture}
+}
+{-10pt}
+{\Huge\selectfont}
+
+\titlespacing*{\chapter}{0pt}{-20pt}{0pt}
+
+
+\titleformat{\section}
+    {\headfont\Large\bfseries}
+    {\thesection}
+    {0.8em}
+    {}
+\titlespacing{\section}
+    {0pt}
+    {10pt}
+    {5pt}
+
+\titleformat{\subsection}
+    {\headfont\large}
+    {\gsq\thesubsection}
+    {0.6em}
+    {}
+\titlespacing{\subsection}
+    {0pt}
+    {5pt}
+    {4pt}
+
+\titleformat{\subsubsection}
+    {\large}
+    {\gsq\thesubsubsection}
+    {0.6em}
+    {}

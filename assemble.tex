@@ -1,256 +1,23 @@
 \documentclass[10pt, twoside]{book}
 
-\usepackage{fontenc}
-\usepackage{fontspec}
-\usepackage{lipsum}
-\usepackage{ctex}
-\usepackage{graphicx}
-\usepackage{fancyhdr}
-\usepackage{hyperref}
-\usepackage{amsmath, amsthm, amssymb}
-\usepackage{etoolbox}
-\usepackage{marginfix}
-\usepackage{framed}
-\usepackage[dvipsnames]{xcolor}
-\usepackage{titlesec}
-\usepackage{ragged2e}
-\usepackage{multicol}
-\usepackage[most]{tcolorbox}
-\usepackage{titletoc}
-\usepackage{wallpaper}
+\input{formatting.tex}
 
-
-% --- 1. Geometry Layout ---
-\usepackage[
-    paper=a4paper,
-    top=2cm,
-    bottom=1.5cm,
-    left=2cm,           
-    right=7cm,          % Wide area for notes
-    marginparwidth=5cm, 
-    marginparsep=0.7cm, 
-    headheight=16pt,    % Increased to prevent fancyhdr warnings
-    asymmetric          % MARGIN NOTES STAY RIGHT
-]{geometry}
-
-
-% --- 2. Font Loading ---
-\newfontfamily\kalwrite[
-    Path=Resources/,
-    Extension=.ttf,
-    UprightFont = *,
-    BoldFont = *,
-    ItalicFont = *
-]{KalWrite}
-\setCJKfamilyfont{kalwrite}[
-    Path=Resources/,
-    Extension=.ttf,
-    UprightFont = *,
-    BoldFont = *,
-    ItalicFont = *
-]{KalWrite}
-\newcommand{\KalWrite}{\kalwrite\CJKfamily{kalwrite}}
-\newcommand{\Kal}[1]{{\KalWrite #1}}
-
-\newfontfamily{\arial}{Arial}
-\setCJKfamilyfont{hei}{SimHei}
-\newcommand{\headfont}{\arial\CJKfamily{hei}}
-
-\newfontfamily{\stencil}{Stencil}
-
-
-% --- 3. Margin Note Commands ---
-\pagestyle{fancy}
-\fancyhf{}
-
-\fancyhfoffset[R]{5.7cm}
-\fancyhead[C]{\small \headfont ■ \mybooktitle \hspace{10cm} ■ \mybooksubtitle}
-
-
-% --- 4. Vertical Header Logic ---
-\newcommand{\VerticalContent}{
-    \rotatebox{-90}{\small {\headfont ■ \heiti \textbf{\thepage}} \hspace{16cm} \leftmark}
-}
-
-% ODD PAGES (Far Right)
-\fancyhead[RO]{
-    \begin{picture}(0,0)
-        \unitlength=1mm
-        \put(7,-10){\VerticalContent}
-    \end{picture}
-}
-
-% EVEN PAGES (Far Left)
-\fancyhead[LE]{
-    \begin{picture}(0,0)
-        \unitlength=1mm
-        \put(-18,-10){\VerticalContent}
-    \end{picture}
-}
-
-\renewcommand{\headrulewidth}{0pt}
-
-\newcommand{\gsq}{{\arial \textcolor{SpringGreen}{■}} \vspace{2pt}}
-
-% Using \marginpar for better text-block awareness
-\newcommand{\mnote}[1]{
-    \marginpar{\raggedright\footnotesize
-    \gsq
-    \itshape\color{black!80}#1}
-}
-
-
-% --- 5. Define Basic Info ---
-\newcommand{\mybooktitle}{大地巡旅} % Insert Real Title
-\newcommand{\mybooksubtitle}{TERRA: A JOURNEY} % Insert Subtitle
-\newcommand{\myAuthor}{E. E. 埃里克森} % Insert Real Author
-\newcommand{\myDate}{\today} % Insert Real Date
+% --- Define Basic Info ---
+\newcommand{\mybooktitle}{大地巡旅} % Insert real title
+\newcommand{\mybooksubtitle}{TERRA: A JOURNEY} % Insert English title (bigger than title)
+\newcommand{\myAuthor}{E. E. 埃里克森} % Insert author
+\newcommand{\myDate}{\today} % Insert date
 
 \title{\mybooktitle}
 \author{\myAuthor}
 \date{\myDate}
-
-% ---
-\renewenvironment{leftbar}[1][\hsize]{
-    \def\FrameCommand{
-        {\color{SpringGreen}\vrule width 3pt}
-        \hspace{8pt}%must no space.
-    }
-    \MakeFramed{\hsize#1\advance\hsize-\width\FrameRestore}
-}{\endMakeFramed}
-
-
-% --- Misc Stuff ---
-\let\cleardoublepage\clearpage
-\renewcommand{\contentsname}{}
-
-
-% --- TOC ---
-\newcommand{\GenericTocStyle}[3]{
-    \titlecontents{#1}
-    [#2]                               % Left Indent
-    {#3}                               % Vertical space/font
-    {\makebox[2.8em][l]{\thecontentspage}} % THE PAGE NUMBER FIRST
-    {}                                 % Numberless entry (like \chapter*)
-    {\hfill}                           % Fill the gap to the title
-}
-\GenericTocStyle{part}{0pt}{\addvspace{1pc} \bfseries \Big}
-\GenericTocStyle{chapter}{0pt}{\addvspace{1pc} \bfseries}
-\GenericTocStyle{section}{3pt}{\small}
-\GenericTocStyle{subsection}{2em}{\footnotesize}
 
 
 % --- Begin ---
 \begin{document}
 
 \frontmatter
-
-% -- Cover
-\newgeometry{margin=0cm}
-\pagestyle{empty}
-
-\begin{titlepage}
-    \CenterWallPaper{1.1}{Resources/cover-image.jpg}
-
-    \centering
-    \vspace*{\fill}
-
-    {\fontsize{80}{95} \stencil \mybooksubtitle} \\[0.5cm]
-    
-    {\fontsize{70}{80} \headfont \mybooktitle} \\ [0.5cm]
-    
-    \vspace{3cm}
-
-    {叽里咕噜说什么呢？\\ 泰拉概况}
-
-    {\color{SpringGreen}\rule{10cm}{1pt}} \\
-    \vspace{5cm}
-    {\color{gray} \myAuthor 著} \\
-    \vspace{0.5cm}
-    {\color{SpringGreen}\rule{10cm}{1pt}} \\
-    \vspace{3cm}
-    {\myDate}
-    
-    \vspace*{\fill} % Vertical Space Buffer Bottom
-    
-\end{titlepage}
-
-\clearpage
-\restoregeometry
-\pagestyle{fancy}
-\ClearWallPaper
-
-% -- Inside Cover
-\newgeometry{margin=0cm}
-\pagestyle{empty}
-
-\begin{titlepage}
-    \centering
-    \vspace*{\fill}
-
-    {\fontsize{80}{95} \stencil \mybooksubtitle} \\[0.5cm]
-    
-    {\fontsize{70}{80} \headfont \mybooktitle} \\ [0.5cm]
-    
-    \vspace{3cm}
-
-    {叽里咕噜说什么呢？\\ 泰拉概况}
-
-    {\color{SpringGreen}\rule{10cm}{1pt}} \\
-    \vspace{5cm}
-    {\color{gray} \myAuthor 著} \\
-    \vspace{0.5cm}
-    {\color{SpringGreen}\rule{10cm}{1pt}} \\
-    \vspace{3cm}
-    {\myDate}
-    
-    \vspace*{\fill} % Vertical Space Buffer Bottom
-    
-\end{titlepage}
-
-\clearpage
-\restoregeometry
-\pagestyle{fancy}
-
-
-% -- Preface
-\chapter*{Preface}
-
-This book grew out of lecture notes developed over several years of linear algebra. The goal is to present the subject in a way that emphasizes intuition and geometric understanding while retaining mathematical rigor.  
-
-The material is intended primarily for undergraduate students, although other readers may find it accessible.  
-
-I am grateful to the students and colleagues who provided valuable feedback during the preparation of this manuscript.
-
-感谢您对《明日方舟》的关注与支持。《明日方舟》计划将于2026年04月01日12:00 ~ 12:10期间进行服务器闪断更新。届时将造成玩家强制掉线，无法登录等问题。为确保您的游戏内账号数据正常，请在本次闪断更新时提前结束关卡。本次更新给各位玩家带来的不便，敬请谅解！
-
-{\KalWrite 使我萌生撰写《鲁赫纳玛》想法的是创造 整个世界的万能的、至仁至慈的真主，而决定此书内容的则是我们民族的精神、它的道德观念和不朽历史。
-
-我敬爱的人民，我在通过这本书同你们谈话，我对你们无限热爱，并且坚信，你们所走的这条始于世界创造之日的道路必将通向光明的未来。我希望你们.我伟大的人民，和我怀有同样的信心，与我共同创作《鲁赫纳码》，因为这本书讲述的是你们自己，是你们的命运和历史，你们的现在和未来。}
-
-
-% -- TOC
-\pagestyle{empty}
-\assignpagestyle{\chapter}{empty}
-
-\newgeometry{
-    left=2cm, 
-    right=2cm,
-    top=3cm, 
-    bottom=2.5cm,
-    headheight=18pt
-}
-
-\chapter*{Contents}
-\begin{multicols}{2}
-    \makeatletter
-    \@starttoc{toc}
-    \makeatother
-\end{multicols}
-\clearpage
-\restoregeometry
-\pagestyle{fancy}
-\assignpagestyle{\chapter}{fancy}
+\input{front.tex}
 
 
 % -- Main Text
@@ -258,33 +25,38 @@ I am grateful to the students and colleagues who provided valuable feedback duri
 \setcounter{chapter}{0}
 
 \chapter{English Test}
+\begin{epigraph}
+    The vertical text should appear on the far right. If it is missing, decrease the first number in \texttt{\textbackslash put(155, -120)}. 
+\end{epigraph}
 
 \section{Odd Testing Page}
-\begin{leftbar}
-    The vertical text should appear on the far right. If it is missing, decrease the first number in \texttt{\textbackslash put(155, -120)}. 
-\end{leftbar}
 
 \lipsum[1-3]
 
 \newpage
 
 \section{Even Page Test}
-\begin{leftbar}
+\begin{epigraph}
     On this page, the margin note is still (this is text to fight the combat overfull problem) on the right, but the vertical text should have jumped to the far left edge of the paper.
-\end{leftbar}
+\end{epigraph}
 
 \lipsum[4-5]\mnote{Even on an even page, the notes remain fixed to the right of the main body text.}
 
-In mathematics, and more specifically in ring theory, an \textbf{ideal} of a ring is a special subset of its elements. Ideals generalize certain subsets of the integers, such as the even numbers or the multiples of 3. Addition and subtraction of even numbers preserves evenness, and multiplying an even number by any integer (even or odd) results in an even number; these closure and absorption properties are the defining properties of an ideal. An ideal can be used to construct a quotient ring in a way similar to how, in group theory, a normal subgroup can be used to construct a quotient group. \mnote{Hello}
+In mathematics, and more specifically in ring theory, an \textbf{ideal} of a ring is a special subset of its elements. Ideals generalize certain subsets of the integers, such as the even numbers or the multiples of 3. Addition and subtraction of even numbers preserves evenness, and multiplying an even number by any integer (even or odd) results in an even number; these closure and absorption properties are the defining properties of an ideal. An ideal can be used to construct a quotient ring in a way similar to how, in group theory, a normal subgroup can be used to construct a quotient group. \mnote{\textbf{Test}}
 
 \includegraphics[scale=0.5]{Resources/海猫种水稻.png}
 
+Arknights is set in the parallel world of Terra, which at first glance appears similar to Earth -- a modern society with comparable, and at times slightly more advanced, technology. However, Terra's inhabitants possess physical traits inspired by various animals and mythical creatures. With few exceptions, beings who closely resemble Earth's Homo sapiens are virtually nonexistent.
+
+The world of Terra is regularly ravaged by cataclysmic natural disasters known as Catastrophes, which have forced much of the population to adopt a nomadic lifestyle through the use of massive mobile settlements called nomadic cities. These disasters also introduced Originium, a black crystalline substance that serves as a highly versatile resource—used as both a power source and an engineering material. Originium also enables the use of magic-like abilities known as Originium Arts.
+
+However, exposure to Originium causes a terminal illness known as Oripathy, which has become a widespread pandemic across Terra. Although Oripathy is not easily transmissible under normal circumstances, it becomes highly infectious upon the death and crystallization of its victims. These individuals, known as the Infected, are subjected to global discrimination and marginalization due to widespread misinformation and fear regarding the disease's transmission.
+
 \chapter{中文测试}
 
-\begin{leftbar}
+\begin{epigraph}
     凯尔希曾经说过：“\Kal{我能吞下玻璃而不伤身体}”,这是中文字体测试中常用的示例文字，其来源是一个语言学项目，而非真实行为。
-\end{leftbar}
-
+\end{epigraph}
 
 \section{卫戍协议}
 
@@ -296,7 +68,7 @@ In mathematics, and more specifically in ring theory, an \textbf{ideal} of a rin
 \mnote{
     \includegraphics[scale=0.1]{Resources/维什戴尔.png}
 
-    \gsq 这是维什戴尔，非常可怕，\Kal{非常可怕}！
+    \gsq 这就是维什戴尔！
 }
 
 当前社会现实中的卫戍协议现象，既有负担的原因，也与比重有直接关系。因此，解决卫戍协议问题，既需要突出规划，也需要改善长效机制，更需要整顿行动，塑造水平，树立精神，教育思想。只有这样，才能实现卫戍协议目标。
@@ -304,6 +76,18 @@ In mathematics, and more specifically in ring theory, an \textbf{ideal} of a rin
 \begin{center}
     \includegraphics[scale=0.6]{Resources/海猫合成玉.png}
 \end{center}
+
+\subsection{狗屁不通}
+一般来说， 苏轼曾经说过，古之立大事者，不惟有超世之才，亦必有坚忍不拔之志。这启发了我， 一般来说， 而这些并不是完全重要，更加重要的问题是， 要想清楚，卫戍协议，到底是一种怎么样的存在。 可是，即使是这样，卫戍协议的出现仍然代表了一定的意义。 可是，即使是这样，卫戍协议的出现仍然代表了一定的意义。 这种事实对本人来说意义重大，相信对这个世界也是有一定意义的。 既然如此， 我们一般认为，抓住了问题的关键，其他一切则会迎刃而解。 而这些并不是完全重要，更加重要的问题是， 卫戍协议的发生，到底需要如何做到，不卫戍协议的发生，又会如何产生。 从这个角度来看， 既然如何， 培根在不经意间这样说过，合理安排时间，就等于节约时间。这句话语虽然很短，但令我浮想联翩。 既然如何， 就我个人来说，卫戍协议对我的意义，不能不说非常重大。 卫戍协议因何而发生？ 培根在不经意间这样说过，要知道对好事的称颂过于夸大，也会招来人们的反感轻蔑和嫉妒。带着这句话，我们还要更加慎重的审视这个问题： 叔本华曾经提到过，普通人只想到如何度过时间，有才能的人设法利用时间。这启发了我， 经过上述讨论， 卫戍协议因何而发生？ 所谓卫戍协议，关键是卫戍协议需要如何写。 每个人都不得不面对这些问题。 在面对这种问题时， 所谓卫戍协议，关键是卫戍协议需要如何写。 我认为， 我们一般认为，抓住了问题的关键，其他一切则会迎刃而解。 迈克尔·F·斯特利在不经意间这样说过，最具挑战性的挑战莫过于提升自我。我希望诸位也能好好地体会这句话。 经过上述讨论， 伏尔泰曾经提到过，坚持意志伟大的事业需要始终不渝的精神。这不禁令我深思。 所谓卫戍协议，关键是卫戍协议需要如何写。 这样看来， 一般来说， 我们都知道，只要有意义，那么就必须慎重考虑。 而这些并不是完全重要，更加重要的问题是， 吕凯特说过一句富有哲理的话，生命不可能有两次，但许多人连一次也不善于度过。这似乎解答了我的疑惑。 本人也是经过了深思熟虑，在每个日日夜夜思考这个问题。
+
+卫戍协议，发生了会如何，不发生又会如何。 了解清楚卫戍协议到底是一种怎么样的存在，是解决一切问题的关键。 在这种困难的抉择下，本人思来想去，寝食难安。 本人也是经过了深思熟虑，在每个日日夜夜思考这个问题。 一般来说， 卫戍协议，到底应该如何实现。 我们都知道，只要有意义，那么就必须慎重考虑。 在这种困难的抉择下，本人思来想去，寝食难安。 带着这些问题，我们来审视一下卫戍协议。 对我个人而言，卫戍协议不仅仅是一个重大的事件，还可能会改变我的人生。 现在，解决卫戍协议的问题，是非常非常重要的。 所以， 在这种困难的抉择下，本人思来想去，寝食难安。 带着这些问题，我们来审视一下卫戍协议。 我们不得不面对一个非常尴尬的事实，那就是， 从这个角度来看， 就我个人来说，卫戍协议对我的意义，不能不说非常重大。 我认为， 对我个人而言，卫戍协议不仅仅是一个重大的事件，还可能会改变我的人生。 这样看来， 每个人都不得不面对这些问题。 在面对这种问题时， 就我个人来说，卫戍协议对我的意义，不能不说非常重大。 这种事实对本人来说意义重大，相信对这个世界也是有一定意义的。 每个人都不得不面对这些问题。 在面对这种问题时， 卫戍协议，发生了会如何，不发生又会如何。 卫戍协议，到底应该如何实现。 要想清楚，卫戍协议，到底是一种怎么样的存在。 生活中，若卫戍协议出现了，我们就不得不考虑它出现了的事实。 从这个角度来看， 现在，解决卫戍协议的问题，是非常非常重要的。 所以， 问题的关键究竟为何？ 一般来说， 这种事实对本人来说意义重大，相信对这个世界也是有一定意义的。 就我个人来说，卫戍协议对我的意义，不能不说非常重大。 而这些并不是完全重要，更加重要的问题是， 对我个人而言，卫戍协议不仅仅是一个重大的事件，还可能会改变我的人生。 带着这些问题，我们来审视一下卫戍协议。 每个人都不得不面对这些问题。 在面对这种问题时， 生活中，若卫戍协议出现了，我们就不得不考虑它出现了的事实。 卫戍协议，到底应该如何实现。 所谓卫戍协议，关键是卫戍协议需要如何写。 总结的来说， 卫戍协议的发生，到底需要如何做到，不卫戍协议的发生，又会如何产生。 要想清楚，卫戍协议，到底是一种怎么样的存在。 现在，解决卫戍协议的问题，是非常非常重要的。 所以， 既然如何， 一般来讲，我们都必须务必慎重的考虑考虑。 我们不得不面对一个非常尴尬的事实，那就是， 每个人都不得不面对这些问题。 在面对这种问题时， 而这些并不是完全重要，更加重要的问题是， 一般来说， 所谓卫戍协议，关键是卫戍协议需要如何写。 这样看来， 我们都知道，只要有意义，那么就必须慎重考虑。 塞涅卡曾经说过，生命如同寓言，其价值不在与长短，而在与内容。这句话语虽然很短，但令我浮想联翩。 问题的关键究竟为何？ 可是，即使是这样，卫戍协议的出现仍然代表了一定的意义。
+
+\section{}
+缪尔赛思小姐是哥伦比亚学界近年来备受关注的天才科学家，在不到三十的年纪便已跻身莱茵生命十杰之列，担任生态科主任，以及特里蒙多所大学的客座讲师。近十年，缪尔赛思小姐及其所带领的科研团队在生态学、遗传学、植物生物化学、植物生理学等多个领域所取得的研究成果，极大地推动了哥伦比亚生命科学与环境科学的发展。
+
+在初步达成合作意向后，罗德岛生物工程研究室与莱茵生命生态科很快便开展一系列联合科研项目，诸如“对模式生物的再研究”“基于物种变异现象对泰拉古生态圈的模型推演”“驮兽、源石虫与环境”“以分子生理学为支持的繁殖性状改良实验”……除去客观层面的诸多考量，上述一系列联合科研项目能够如此快速地推进，值得一提的原因是，双方负责人对于实验环境的特殊需求惊人地一致，简而言之，“洁净”。缪尔赛思小姐受邀来罗德岛参观生物工程研究室，当她踏进实验室，惊呼“清新扑鼻”，下个瞬间滤风装置将她的身躯吹成泡沫，真身微笑着出现在所有人眼前的那一刻，温蒂的眼睛也亮了。虽然缪尔赛思小姐习惯在低源石环境中工作的情况与温蒂的洁癖有本质的区别，但反映到对实验室净化系统与操作流程的高要求上，是不谋而合的。果不其然，她们两人相谈甚欢。这是一个极好的开始，后续一系列深度合作的展开，便是顺理成章的事情了。
+
+继多萝西·弗兰克斯小姐之后，莱茵生命又一位主任与罗德岛达成合作，这意味着我们两家公司的接触正在日渐加深，在未来并不明朗的形势下，这对双方的存续和发展都有益无害。
 
 
 \chapter{数学测试}

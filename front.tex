@@ -1,0 +1,100 @@
+% -- Cover --
+\newgeometry{margin=0cm}
+\pagestyle{empty}
+
+\begin{titlepage}
+    \CenterWallPaper{1.1}{Resources/cover-image.jpg}
+
+    \centering
+    \vspace*{\fill}
+
+    {\fontsize{80}{95} \stencil \mybooksubtitle} \\ [0.5cm]
+    {\fontsize{70}{80} \headfont \mybooktitle} \\ [0.5cm]
+    
+    \vspace{3cm}
+
+    {叽里咕噜说什么呢？\\ 泰拉概况}
+
+    {\color{SpringGreen}\rule{10cm}{1pt}} \\
+    \vspace{5cm}
+    {\color{gray} \myAuthor 著} \\
+    \vspace{0.5cm}
+    {\color{SpringGreen}\rule{10cm}{1pt}} \\
+    \vspace{3cm}
+    {\myDate}
+    
+    \vspace*{\fill} % Vertical Space Buffer Bottom
+\end{titlepage}
+
+\clearpage
+\restoregeometry
+\pagestyle{fancy}
+% \ClearWallPaper
+
+% -- Inside Cover --
+\newgeometry{margin=0cm}
+\pagestyle{empty}
+
+\begin{titlepage}
+    \centering
+    \vspace*{\fill}
+
+    {\fontsize{80}{95} \stencil \mybooksubtitle} \\[0.5cm]
+    {\fontsize{70}{80} \headfont \mybooktitle} \\ [0.5cm]
+    
+    \vspace{3cm}
+
+    {\color{SpringGreen}\rule{10cm}{1pt}} \\
+    \vspace{5cm}
+    {\color{gray} \myAuthor 著} \\
+    \vspace{0.5cm}
+    {\color{SpringGreen}\rule{10cm}{1pt}} \\
+    \vspace{3cm}
+    {\myDate}
+    
+    \vspace*{\fill}
+\end{titlepage}
+
+\clearpage
+\restoregeometry
+\pagestyle{fancy}
+
+
+% -- Preface --
+\chapter*{前言}
+
+This book grew out of lecture notes developed over several years of linear algebra. The goal is to present the subject in a way that emphasizes intuition and geometric understanding while retaining mathematical rigor.  
+
+The material is intended primarily for undergraduate students, although other readers may find it accessible.  
+
+I am grateful to the students and colleagues who provided valuable feedback during the preparation of this manuscript.
+
+感谢您对《明日方舟》的关注与支持。《明日方舟》计划将于2026年04月01日12:00 ~ 12:10期间进行服务器闪断更新。届时将造成玩家强制掉线，无法登录等问题。为确保您的游戏内账号数据正常，请在本次闪断更新时提前结束关卡。本次更新给各位玩家带来的不便，敬请谅解！
+
+{\KalWrite 使我萌生撰写《鲁赫纳玛》想法的是创造 整个世界的万能的、至仁至慈的真主，而决定此书内容的则是我们民族的精神、它的道德观念和不朽历史。
+
+我敬爱的人民，我在通过这本书同你们谈话，我对你们无限热爱，并且坚信，你们所走的这条始于世界创造之日的道路必将通向光明的未来。我希望你们.我伟大的人民，和我怀有同样的信心，与我共同创作《鲁赫纳码》，因为这本书讲述的是你们自己，是你们的命运和历史，你们的现在和未来。}
+
+
+% -- TOC --
+\pagestyle{empty}
+\assignpagestyle{\chapter}{empty}
+
+\newgeometry{
+    left=2cm, 
+    right=2cm,
+    top=3cm, 
+    bottom=2.5cm,
+    headheight=18pt
+}
+
+\chapter*{Contents}
+\begin{multicols}{2}
+    \makeatletter
+    \@starttoc{toc}
+    \makeatother
+\end{multicols}
+\clearpage
+\restoregeometry
+\pagestyle{fancy}
+\assignpagestyle{\chapter}{fancy}
