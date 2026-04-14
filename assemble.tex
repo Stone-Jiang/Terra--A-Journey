@@ -100,9 +100,23 @@ However, exposure to Originium causes a terminal illness known as Oripathy, whic
 
 \section{Vectors}
 
-\begin{definition}[Test Def]
-    This is a definition.
+
+
+\begin{definition}
+    Let $X$ be a non-empty set. A collection $T$ of subsets of $X$ is a \textbf{topology} on $X$ if
+    \begin{enumerate}
+        \item $X\in T, \varnothing \in T$.
+        \item The union of any (finite/infinite) number of sets in $T$ is in $T$.
+        \item The intersection of any two sets in $T$ is in $T$.
+        The pair $(X, T)$ is a \textbf{topological space}.
+    \end{enumerate}
 \end{definition}
+
+\begin{example}
+    Let $X = \{a, b, c, d, e, f\}$ and 
+    $T_1 = \{X, \varnothing, \{a\}, \{c, d\}, \{a, c, d\}, \{b, c, d, e, f\}\}$. 
+    Then $T_1$ is a topology on $X$.
+\end{example}
 
 \begin{lemma}[Zorn's]
     There exists ...
@@ -116,8 +130,8 @@ However, exposure to Originium causes a terminal illness known as Oripathy, whic
     This is a trivial consequence of Theorem \ref{thm:this}
 \end{corollary}
 
-\begin{proposition}[The Best Propersition]
-    This is the best propersition ever.
+\begin{proposition}[The Best Proposition]
+    This is the best proposition ever.
 \end{proposition}
 
 \section{Matrices}
@@ -128,8 +142,6 @@ However, exposure to Originium causes a terminal illness known as Oripathy, whic
 
 
 \include{Contents/c1}
-\include{Contents/c2}
-\include{Contents/c4}
 
 
 \end{document}
