@@ -17,7 +17,12 @@
 \usepackage{titletoc}
 \usepackage{wallpaper}
 \usepackage{tikz}
+\usepackage{etoolbox}
+\usepackage[normalem]{ulem}
+
 \usetikzlibrary{positioning}
+\usetikzlibrary{decorations.pathmorphing}
+\usetikzlibrary{calc}
 
 
 % --- Geometry Layout ---
@@ -49,8 +54,8 @@
     BoldFont = *,
     ItalicFont = *
 ]{KalWrite}
-\newcommand{\KalWrite}{\kalwrite\CJKfamily{kalwrite}}
-\newcommand{\Kal}[1]{{\KalWrite #1}}
+\newcommand{\KalWrite}{\CJKfamily{kalwrite}\kalwrite}
+\newcommand{\Kal}[1]{{\color{commentcolor} \KalWrite #1}}
 
 \newfontfamily{\arial}{Arial}[
     BoldFont=Arial Bold,
@@ -66,10 +71,6 @@
 \newcommand{\headfont}{\arial\CJKfamily{hei}}
 
 \newfontfamily{\stencil}{Stencil}
-
-% --- Color Definition ---
-\definecolor{partgreen}{RGB}{0,180,120}
-\definecolor{noteyellow}{RGB}{247,247,219}
 
 
 % --- Chapter Redefinition ---
@@ -111,12 +112,13 @@
 
 \renewcommand{\headrulewidth}{0pt}
 
-\newcommand{\gsq}{{\arial \textcolor{SpringGreen}{■}} \vspace{2pt}}
+\newcommand{\gsq}{{\arial \textcolor{pointcolor}{■}} \vspace{2pt}}
+\newcommand{\notesq}{{\arial \textcolor{mnotecolor}{■}} \vspace{2pt}}
 
 % Using \marginpar for better text-block awareness
 \newcommand{\mnote}[1]{
     \marginpar{\raggedright\footnotesize
-    \gsq
+    \notesq
     \itshape\color{black!80}#1}
 }
 
@@ -124,8 +126,19 @@
 % --- Text Environments ---
 \newenvironment{epigraph}[1][\hsize]{
     \def\FrameCommand{
-        {\color{SpringGreen}\vrule width 3pt}
-        \hspace{8pt}%must no space.
+        \hspace{10pt}
+        {\color{epicolor} \bfseries \headfont \small EPIGRAPH \ ■}
+        \hspace{6pt}
+        {\color{epicolor}\vrule width 3pt}
+        \hspace{8pt}
+    }
+    \MakeFramed{\hsize#1\advance\hsize-\width\FrameRestore}
+}{\endMakeFramed}
+
+\newenvironment{introduction}[1][\hsize]{
+    \def\FrameCommand{
+        {\color{epicolor}\vrule width 3pt}
+        \hspace{10pt}
     }
     \MakeFramed{\hsize#1\advance\hsize-\width\FrameRestore}
 }{\endMakeFramed}
@@ -134,6 +147,15 @@
 % --- Misc Stuff ---
 \let\cleardoublepage\clearpage
 \renewcommand{\contentsname}{}
+
+% Hand drawn line
+\newcommand{\kalline}[1]{%
+    \begin{tikzpicture}[baseline=(text.base)]%
+    \node[inner sep=0] (text) {#1};
+    \draw[thick, color=commentcolor, decorate, decoration={random steps, amplitude=0.4pt, segment length=5pt}]
+        (text.south west) -- (text.south east);
+    \end{tikzpicture}%
+}
 
 
 % --- TOC ---
@@ -204,5 +226,181 @@
     {}
 
 
+% --- Defining colors ---
+\colorlet{commentcolor}{blue!50!gray}
+
+\newcommand{\origcolor}{
+    \pagecolor{gray!10}
+    \colorlet{pointcolor}{SpringGreen}
+    \colorlet{mnotecolor}{black!70}
+    \colorlet{epicolor}{SpringGreen}
+    \definecolor{examplecolor}{RGB}{247,247,219}
+
+    \definecolor{defbkg}{RGB}{207, 229, 187}
+    \definecolor{lemmabkg}{RGB}{255,248,225}
+    \definecolor{theorembkg}{RGB}{255,224,178}
+    \definecolor{corbkg}{RGB}{255,204,128}
+    \definecolor{propbkg}{RGB}{255,240,230}
+
+    \newcommand{\arcvalue}{0pt}
+}
+
+\newcommand{\innocolor}{
+    \pagecolor{white}
+    \colorlet{pointcolor}{black!80}
+    \colorlet{mnotecolor}{black!80}
+    \colorlet{epicolor}{NavyBlue}
+    \colorlet{examplecolor}{Dandelion!10}
+
+    \definecolor{defbkg}{RGB}{230,255,240}
+    \definecolor{lemmabkg}{RGB}{240,247,255}
+    \definecolor{theorembkg}{RGB}{224,239,255}
+    \definecolor{corbkg}{RGB}{198,218,252}
+
+    \newcommand{\arcvalue}{3pt}
+}
+
+\newbool{original}
+\setbool{original}{true} % turn on for original colors, off for more notable colors
+\ifbool{original}{\origcolor}{\innocolor}
+
+\colorlet{defframe}{defbkg!50!black}
+\colorlet{lemmaframe}{lemmabkg!50!black}
+\colorlet{theoremframe}{theorembkg!50!black}
+\colorlet{corframe}{corbkg!50!black}
+
+
 % --- Math envs ---
+% Theorem styles
+\newtheoremstyle{mytheorem}
+    {1pt}{1pt} % space above & space below
+    {} % body font
+    {0pt} % indent amount
+    {\bfseries \headfont} % head font
+    {} % head punct
+    {\newline} % after head space
+    {} % head spec
+
+\newtheoremstyle{notice}
+    {2pt}{2pt}
+    {\KalWrite}
+    {0pt}
+    {\bfseries \headfont}
+    {:} 
+    {2pt}
+    {}
+
+% Theorem envs
+
+\newcommand{\chineseTheorems}{
+    \theoremstyle{mytheorem}
+    \newtheorem{definition}{定义}[section]
+    \newtheorem{theorem}{定理}[section]
+    \newtheorem{lemma}[theorem]{引理}
+    \newtheorem{axiom}[theorem]{公理}
+    \newtheorem{proposition}[theorem]{命题}
+    \newtheorem{corollary}{推论}[theorem]
+    \newtheorem{example}{例}[section]
+
+    \theoremstyle{notice}
+    \newtheorem*{remark}{注意}
+    \newtheorem*{note}{笔记}
+
+    \theoremstyle{definition}
+    \newtheorem{problem}{问}[section]
+    \newtheorem{exercise}{练习}[section]
+    \newtheorem*{property}{性质：}
+    \newtheorem*{assumption}{假设：}
+    \newtheorem*{conclusion}{结论：}
+}
+
+\newcommand{\defaultTheorems}{
+    \theoremstyle{mytheorem}
+    \newtheorem{definition}{Definition}[section]
+    \newtheorem{theorem}{Theorem}[section]
+    \newtheorem{lemma}[theorem]{Lemma}
+    \newtheorem{axiom}[theorem]{Axiom}
+    \newtheorem{proposition}[theorem]{Proposition}
+    \newtheorem{corollary}{Corollary}[theorem]
+    \newtheorem{example}{Example}[section]
+
+    \theoremstyle{notice}
+    \newtheorem*{remark}{Remark}
+    \newtheorem*{note}{Note}
+
+    \theoremstyle{definition}
+    \newtheorem{problem}{Problem}[section]
+    \newtheorem{exercise}{Exercise}[section]
+    \newtheorem*{property}{Property}
+    \newtheorem*{assumption}{Assumption}
+    \newtheorem*{conclusion}{Conclusion}
+}
+
+\newbool{chinese}
+\setbool{chinese}{false}
+\ifbool{chinese}{\chineseTheorems}{\defaultTheorems}
+
+% Theorem colorbox
+\tcolorboxenvironment{definition}{
+    enhanced,
+    breakable,
+    colback=defbkg,
+    colframe=defframe,
+    boxrule=0.5pt,
+    arc=\arcvalue,
+}
+
+\tcolorboxenvironment{theorem}{
+    enhanced, % enables advanced drawing features.
+    breakable, % allows colorbox to break across pages.
+    colback=theorembkg,
+    colframe=theoremframe, % border color
+    boxrule=0.5pt, % border thickness
+    arc=\arcvalue, % corner roundness
+}
+
+\tcolorboxenvironment{lemma}{
+    enhanced,
+    breakable,
+    colback=lemmabkg,
+    colframe=lemmaframe,
+    boxrule=0.5pt,
+    arc=\arcvalue,
+}
+
+\tcolorboxenvironment{axiom}{
+    enhanced,
+    breakable,
+    colback=lemmabkg,
+    colframe=lemmaframe,
+    boxrule=0.5pt,
+    arc=\arcvalue,
+}
+
+\tcolorboxenvironment{corollary}{
+    enhanced,
+    breakable,
+    colback=corbkg,
+    colframe=corframe,
+    boxrule=0.5pt,
+    arc=\arcvalue,
+}
+
+\tcolorboxenvironment{proposition}{
+    enhanced,
+    breakable,
+    colback=theorembkg,
+    colframe=theoremframe,
+    boxrule=0.5pt,
+    arc=\arcvalue,
+}
+
+\tcolorboxenvironment{example}{
+    enhanced,
+    breakable,
+    colback=examplecolor,
+    colframe=black,
+    boxrule=0.1pt,
+    arc=0pt,
+}
 

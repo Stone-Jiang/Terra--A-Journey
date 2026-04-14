@@ -15,10 +15,18 @@
 - `mnote{}`: 注释，对齐指代的文字
 
 - Epigraph 环境: 生成原书每张开头的段落，目前没有完全按照原书（太复杂了不会做）
+    (修改：现在可以做到一部分了，但是字的位置还是没法调)
+- `\kalline{}`: 可以模拟原书的手写划线，使用tikz随机过程，目前不能跨行
+
+
+#### 数学环境
+- 定义了 lemma, axiom, proposition, theorem, corollary, definition 编号定理环境
+- 定义了 example, exercise, problem 编号环境
+- 定义了 remark, note 无编号注意环境
+- 定义了 property, assumption, conclusion 无编号环境
 
 
 #### *目前还在施工中*：
-- 数学功能和环境
 - 图片还没完全测试
 - 目前黑体字依赖于Windows系统自带字体，不能跨平台，正在研究。
 - 一些奇怪的间距
